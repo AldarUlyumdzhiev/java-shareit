@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface BookingService {
     BookingDto create(BookingDto bookingDto, Integer userId);
+
     BookingDto getById(Integer bookingId, Integer userId);
+
     List<BookingDto> getAllByUser(Integer userId);
 }
