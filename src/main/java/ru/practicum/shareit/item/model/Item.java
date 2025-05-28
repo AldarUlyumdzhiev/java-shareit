@@ -1,16 +1,19 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Item {
-    private Integer id;
-    private String name;
-    private String description;
-    private Boolean available;
-    private User owner;
-    private ItemRequest request;
+    Integer id;
+    String name;
+    String description;
+    Boolean available;
+    User owner;
+    ItemRequest request;
 }

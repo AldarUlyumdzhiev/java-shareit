@@ -2,25 +2,28 @@ package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingDto {
-    private Integer id;
+    Integer id;
 
     @NotNull(message = "Start date required")
     @Future(message = "Start must be in future")
-    private LocalDateTime start;
+    LocalDateTime start;
 
     @NotNull(message = "End date required")
     @Future(message = "End must be in future")
-    private LocalDateTime end;
+    LocalDateTime end;
 
     @NotNull(message = "Item id required")
-    private Integer itemId;
+    Integer itemId;
 
-    private Integer bookerId;
-    private String status;
+    Integer bookerId;
+    String status;
 }

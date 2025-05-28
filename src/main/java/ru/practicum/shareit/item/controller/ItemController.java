@@ -9,6 +9,8 @@ import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
+import static ru.practicum.shareit.util.Constants.SHARER_ID_HEADER;
+
 
 @Validated
 @RestController
@@ -20,14 +22,14 @@ public class ItemController {
 
     @PostMapping
     public ItemCreateDto create(@Valid @RequestBody ItemCreateDto itemCreateDto,
-                                @RequestHeader("X-Sharer-User-Id") Integer userId) {
+                                @RequestHeader(SHARER_ID_HEADER) Integer userId) {
         return itemService.create(itemCreateDto, userId);
     }
 
     @PatchMapping("/{itemId}")
     public ItemCreateDto update(@PathVariable Integer itemId,
                                 @RequestBody ItemUpdateDto itemDto,
-                                @RequestHeader(value = "X-Sharer-User-Id", required = false) Integer userId) {
+                                @RequestHeader(value = SHARER_ID_HEADER, required = false) Integer userId) {
         return itemService.update(itemId, itemDto, userId);
     }
 
@@ -37,7 +39,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemCreateDto> getAllByOwner(@RequestHeader("X-Sharer-User-Id") Integer userId) {
+    public List<ItemCreateDto> getAllByOwner(@RequestHeader(SHARER_ID_HEADER) Integer userId) {
         return itemService.findAllByOwner(userId);
     }
 
