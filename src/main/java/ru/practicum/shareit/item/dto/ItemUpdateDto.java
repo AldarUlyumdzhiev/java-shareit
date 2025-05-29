@@ -1,10 +1,13 @@
 package ru.practicum.shareit.item.dto;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemUpdateDto {
-    private String name;
-    private String description;
-    private Boolean available;
+    String name;
+    String description;
+    Boolean available;
 }
