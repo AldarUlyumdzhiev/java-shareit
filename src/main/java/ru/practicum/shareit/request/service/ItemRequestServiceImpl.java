@@ -1,62 +1,58 @@
 package ru.practicum.shareit.request.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
 import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserServiceImpl;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ItemRequestServiceImpl implements ItemRequestService {
 
-    private final Map<Integer, ItemRequest> storage = new HashMap<>();
+    private final ItemRequestRepository itemRequestRepository;
     private final UserServiceImpl userService;
 
     @Override
-    public ItemRequestDto create(ItemRequestDto dto, Integer userId) {
-        User user = userService.findEntityById(userId);
-        ItemRequest request = ItemRequestMapper.toEntity(dto);
-
-        int newId = storage.keySet().stream().max(Integer::compareTo).orElse(-1) + 1;
-
-        request.setId(newId);
-        request.setRequestor(user);
-        request.setCreated(LocalDateTime.now());
-        storage.put(request.getId(), request);
-        return ItemRequestMapper.toDto(request);
+    public ItemRequestDto create(ItemRequestDto dto, Long userId) {
+        User requestor = userService.findEntityById(userId);
+        ItemRequest itemRequest = ItemRequestMapper.toItemRequest(dto, requestor);
+        ItemRequest saved = itemRequestRepository.save(itemRequest);
+        return ItemRequestMapper.toItemRequestDto(saved);
     }
 
     @Override
-    public List<ItemRequestDto> getRequestsByUser(Integer userId) {
-        return storage.values().stream()
-                .filter(r -> r.getRequestor().getId().equals(userId))
-                .map(ItemRequestMapper::toDto)
+    public List<ItemRequestDto> getAllRequestsByUser(Long userId) {
+        List<ItemRequestDto> allRequestsByUser = itemRequestRepository.findAllByRequestorId(userId).stream()
+                .map(ItemRequestMapper::toItemRequestDto)
                 .collect(Collectors.toList());
+        return allRequestsByUser;
     }
 
-    @Override
-    public ItemRequestDto getById(Integer requestId, Integer userId) {
-        if (!storage.containsKey(requestId)) {
-            throw new NoSuchElementException("Request not found");
+    public ItemRequestDto getById(Long requestId, Long userId) {
+        ItemRequest itemRequest = itemRequestRepository.getByIdAndRequestorId(requestId, userId);
+        if (itemRequest == null) {
+            throw new NoSuchElementException("Item request not found");
         }
-        return ItemRequestMapper.toDto(storage.get(requestId));
+        ItemRequestDto dto = ItemRequestMapper.toItemRequestDto(itemRequest);
+        return dto;
     }
 
     @Override
-    public List<ItemRequestDto> getAll(Integer userId) {
-        return storage.values().stream()
-                .filter(r -> !r.getRequestor().getId().equals(userId))
-                .map(ItemRequestMapper::toDto)
+    public List<ItemRequestDto> getAllUserRequests(Long userId) {
+        List<ItemRequestDto> allUserRequests = itemRequestRepository.findAllByRequestorId(userId).stream()
+                .map(ItemRequestMapper::toItemRequestDto)
                 .collect(Collectors.toList());
+        return allUserRequests;
+
     }
 }

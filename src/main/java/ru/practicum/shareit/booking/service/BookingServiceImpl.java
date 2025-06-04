@@ -1,67 +1,93 @@
 package ru.practicum.shareit.booking.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.dto.BookingDto;
+import org.springframework.web.server.ResponseStatusException;
+import ru.practicum.shareit.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserServiceImpl;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    private final Map<Integer, Booking> storage = new HashMap<>();
+    private final BookingRepository bookingRepository;
     private final ItemServiceImpl itemService;
     private final UserServiceImpl userService;
 
     @Override
-    public BookingDto create(BookingDto bookingDto, Integer userId) {
+    public BookingResponseDto create(BookingRequestDto dto, Long userId) {
         User booker = userService.findEntityById(userId);
-        Item item = itemService.findEntityById(bookingDto.getItemId());
+        Item item   = itemService.findEntityById(dto.getItemId());
 
-        Booking booking = new Booking();
-        int newId = storage.keySet().stream().max(Integer::compareTo).orElse(-1) + 1;
+        if (item.getOwner().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner can't book own item");
+        }
+        if (!item.getAvailable()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Item is unavailable");
+        }
+        if (dto.getStart().isAfter(dto.getEnd()) || dto.getStart().isEqual(dto.getEnd())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start must be before end");
+        }
+        if (dto.getStart().isBefore(LocalDateTime.now()) || dto.getEnd().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking dates must be in future");
+        }
 
-        booking.setId(newId);
-        booking.setBooker(booker);
-        booking.setItem(item);
-        booking.setStart(bookingDto.getStart());
-        booking.setEnd(bookingDto.getEnd());
+        Booking booking = BookingMapper.toBooking(dto, item, booker);
         booking.setStatus(Status.WAITING);
 
-        storage.put(booking.getId(), booking);
-        return BookingMapper.toDto(booking);
+        return BookingMapper.toBookingResponseDto(bookingRepository.save(booking));
     }
 
     @Override
-    public BookingDto getById(Integer bookingId, Integer userId) {
-        Booking booking = storage.get(bookingId);
-        if (booking == null) throw new NoSuchElementException("Booking not found");
+    public BookingResponseDto getById(Long bookingId, Long userId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NoSuchElementException("Booking not found"));
 
-        if (!booking.getBooker().getId().equals(userId) &&
-                !booking.getItem().getOwner().getId().equals(userId)) {
+        if (!booking.getBooker().getId().equals(userId)
+                && !booking.getItem().getOwner().getId().equals(userId)) {
             throw new SecurityException("Access denied");
         }
 
-        return BookingMapper.toDto(booking);
+        return BookingMapper.toBookingResponseDto(booking);
     }
 
     @Override
-    public List<BookingDto> getAllByUser(Integer userId) {
-        return storage.values().stream()
-                .filter(b -> b.getBooker().getId().equals(userId))
-                .map(BookingMapper::toDto)
+    public List<BookingResponseDto> getAllByUser(Long userId) {
+        return bookingRepository.findByBookerId(userId).stream()
+                .map(BookingMapper::toBookingResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public BookingResponseDto approveBooking(Long bookingId, Long ownerId, boolean approved) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NoSuchElementException("Booking not found"));
+
+        if (!booking.getItem().getOwner().getId().equals(ownerId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only owner can approve bookings");
+        }
+
+        if (booking.getStatus() != Status.WAITING) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking already processed");
+        }
+
+        booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
+        return BookingMapper.toBookingResponseDto(bookingRepository.save(booking));
     }
 }

@@ -10,20 +10,13 @@ import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookingDto {
-    Integer id;
+public class BookingRequestDto {
+    @NotNull(message = "Item id is required")
+    Long itemId;
 
-    @NotNull(message = "Start date required")
-    @Future(message = "Start must be in future")
+    @NotNull @Future
     LocalDateTime start;
 
-    @NotNull(message = "End date required")
-    @Future(message = "End must be in future")
+    @NotNull @Future
     LocalDateTime end;
-
-    @NotNull(message = "Item id required")
-    Integer itemId;
-
-    Integer bookerId;
-    String status;
 }
