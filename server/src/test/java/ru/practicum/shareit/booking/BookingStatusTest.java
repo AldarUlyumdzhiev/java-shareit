@@ -8,19 +8,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookingStatusTest {
 
     @Test
-    void valueOf_shouldReturnCorrectEnum() {
+    void shouldReturnCorrectEnum() {
         assertEquals(Status.WAITING, Status.valueOf("WAITING"));
         assertEquals(Status.APPROVED, Status.valueOf("APPROVED"));
         assertEquals(Status.REJECTED, Status.valueOf("REJECTED"));
     }
 
     @Test
-    void valueOf_shouldThrowExceptionForUnknownValue() {
+    void shouldThrowExceptionForUnknownValue() {
         assertThrows(IllegalArgumentException.class, () -> Status.valueOf("UNKNOWN"));
     }
 
     @Test
-    void values_shouldContainAllStatuses() {
+    void shouldContainAllStatuses() {
         Status[] statuses = Status.values();
         assertEquals(3, statuses.length);
         assertArrayEquals(new Status[]{Status.WAITING, Status.APPROVED, Status.REJECTED}, statuses);
