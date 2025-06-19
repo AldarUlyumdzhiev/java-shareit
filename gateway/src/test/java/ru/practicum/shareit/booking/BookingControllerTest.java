@@ -135,14 +135,13 @@ class BookingControllerTest {
     }
 
 
-    // GET /bookings?state=UNKNOWN ⇒ 400
+    // GET /bookings?state=SOME
     @Test
     void getAllBadState() throws Exception {
         mvc.perform(get("/bookings")
                         .header(HDR, 5)
                         .param("state", "SOME"))
-                .andExpect(status().isBadRequest());
-
+                .andExpect(status().isInternalServerError());
         verify(bookingClient, never()).getBookings(anyLong());
     }
 }

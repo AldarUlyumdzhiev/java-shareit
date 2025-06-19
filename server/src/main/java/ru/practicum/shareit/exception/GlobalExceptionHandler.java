@@ -53,12 +53,18 @@ public class GlobalExceptionHandler {
         return Map.of("error", "Внутренняя ошибка сервера", "details", e.getMessage());
     }
 
-
-
-
     @ExceptionHandler(CommentNotAllowedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleCommentNotAllowed(CommentNotAllowedException e) {
         return Map.of("error", e.getMessage());
+    }
+
+    @RestControllerAdvice
+    public class GatewayExceptionHandler {
+        @ExceptionHandler(IllegalArgumentException.class)
+        @ResponseStatus(HttpStatus.BAD_REQUEST)
+        public Map<String,String> badRequest(IllegalArgumentException e) {
+            return Map.of("error", e.getMessage());
+        }
     }
 }

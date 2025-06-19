@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ class BookingDtoJsonTest {
     private static final LocalDateTime NOW = LocalDateTime.now();
 
     @Autowired private ObjectMapper mapper;
-    @Autowired private Validator validator;
+    private final Validator validator =
+            Validation.buildDefaultValidatorFactory().getValidator();
 
 
     // toJson

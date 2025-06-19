@@ -2,6 +2,7 @@ package ru.practicum.shareit.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ import static org.assertj.core.api.Assertions.*;
 class ItemRequestDtoJsonTest {
 
     @Autowired private ObjectMapper mapper;
-    @Autowired private Validator validator;
+    private final Validator validator =
+            Validation.buildDefaultValidatorFactory().getValidator();
 
 
     // serialize
