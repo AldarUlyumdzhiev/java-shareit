@@ -2,22 +2,23 @@ package ru.practicum.shareit.request.mapper;
 
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.user.model.User;
 
 public class ItemRequestMapper {
 
-    public static ItemRequestDto toDto(ItemRequest request) {
+    public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
         ItemRequestDto dto = new ItemRequestDto();
-        dto.setId(request.getId());
-        dto.setDescription(request.getDescription());
-        dto.setCreated(request.getCreated());
+        dto.setId(itemRequest.getId());
+        dto.setDescription(itemRequest.getDescription());
+        dto.setUserId(itemRequest.getRequestor().getId());
         return dto;
     }
 
-    public static ItemRequest toEntity(ItemRequestDto dto) {
-        ItemRequest request = new ItemRequest();
-        request.setId(dto.getId());
-        request.setDescription(dto.getDescription());
-        request.setCreated(dto.getCreated());
-        return request;
+    public static ItemRequest toItemRequest(ItemRequestDto dto, User user) {
+        ItemRequest itemRequest = new ItemRequest();
+        itemRequest.setId(dto.getId());
+        itemRequest.setDescription(dto.getDescription());
+        itemRequest.setRequestor(user);
+        return itemRequest;
     }
 }

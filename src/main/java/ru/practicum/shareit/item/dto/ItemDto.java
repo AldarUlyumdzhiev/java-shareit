@@ -1,4 +1,4 @@
-package ru.practicum.shareit.request.dto;
+package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,12 +8,17 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ItemRequestDto {
+public class ItemDto {
     Long id;
 
-    @NotBlank(message = "Description required")
+    @NotBlank
+    String name;
+
+    @NotBlank
     String description;
 
-    @NotNull(message = "User id required")
-    Long userId;
+    @NotNull
+    Boolean available;
+
+    Long requestId;
 }

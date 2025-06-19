@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
-    Integer id;
+    Long id;
 
     @NotBlank(message = "Name must not be blank")
     String name;
