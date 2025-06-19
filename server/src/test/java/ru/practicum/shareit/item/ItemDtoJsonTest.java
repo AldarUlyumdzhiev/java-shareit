@@ -42,7 +42,6 @@ class ItemDtoJsonTest {
         assertThat(json).contains("\"requestId\":5");
     }
 
-
     // blank fields validation
     // name null, description null, available null
     @Test
@@ -57,7 +56,6 @@ class ItemDtoJsonTest {
         assertThat(v).anyMatch(c -> c.getPropertyPath().toString().equals("available"));
     }
 
-
     // blank text validation
     @Test
     void commentValidateBlankText() {
@@ -71,7 +69,6 @@ class ItemDtoJsonTest {
                 .asString()
                 .contains("must not be blank");
     }
-
 
     // text validation
     @Test
