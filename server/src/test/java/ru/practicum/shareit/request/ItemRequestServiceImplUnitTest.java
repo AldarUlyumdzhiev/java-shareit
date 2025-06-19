@@ -35,7 +35,9 @@ class ItemRequestServiceImplUnitTest {
                 .id(id).description("need").created(LocalDateTime.now()).requestor(user).build();
     }
 
-    @BeforeEach void init() { MockitoAnnotations.openMocks(this); }
+    @BeforeEach void init() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void createReturnsSavedDto() {

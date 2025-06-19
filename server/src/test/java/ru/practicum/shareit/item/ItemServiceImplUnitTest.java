@@ -48,7 +48,9 @@ class ItemServiceImplUnitTest {
     final User booker = new User(2L, "Booker", "b@mail.ru");
 
     @BeforeEach
-    void init() { MockitoAnnotations.openMocks(this); }
+    void init() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     @DisplayName("create(): blank name -> IllegalArgumentException")

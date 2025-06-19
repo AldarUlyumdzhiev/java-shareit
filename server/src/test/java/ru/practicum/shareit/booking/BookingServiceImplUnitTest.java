@@ -34,7 +34,9 @@ class BookingServiceImplUnitTest {
             .id(5L).name("Дрель").description("d")
             .available(true).owner(owner).build();
 
-    @BeforeEach void init() { MockitoAnnotations.openMocks(this); }
+    @BeforeEach void init() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     BookingRequestDto makeReq() {
         BookingRequestDto dto = new BookingRequestDto();
