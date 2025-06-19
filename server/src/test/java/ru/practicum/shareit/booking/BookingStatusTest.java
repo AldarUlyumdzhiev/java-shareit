@@ -5,7 +5,7 @@ import ru.practicum.shareit.booking.model.Status;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class StatusTest {
+class BookingStatusTest {
 
     @Test
     void valueOf_shouldReturnCorrectEnum() {
