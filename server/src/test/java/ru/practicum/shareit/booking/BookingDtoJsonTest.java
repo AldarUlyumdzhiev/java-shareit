@@ -17,7 +17,7 @@ class BookingDtoJsonTest {
     @Autowired private ObjectMapper mapper;
 
     @Test
-    void serialize_and_deserialize_BookingResponseDto() throws Exception {
+    void BookingResponseToDtoAndBack() throws Exception {
         LocalDateTime start = LocalDateTime.of(2030,1,1,12,0);
         LocalDateTime end   = start.plusDays(1);
 

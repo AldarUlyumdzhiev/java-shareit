@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.*;
 class BookingMapperTest {
 
     @Test
-    void roundTrip_entity_to_dto_and_back() {
+    void maptoDtoAndBack() {
         LocalDateTime now = LocalDateTime.now();
         User   booker = User.builder().id(7L).build();
         Item   item   = Item.builder().id(42L).name("Перфоратор").build();
