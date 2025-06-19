@@ -38,7 +38,7 @@ class ItemRequestServiceImplUnitTest {
     @BeforeEach void init() { MockitoAnnotations.openMocks(this); }
 
     @Test
-    void create_returnsSavedDto() {
+    void createReturnsSavedDto() {
         when(userService.findEntityById(1L)).thenReturn(user);
 
         ArgumentCaptor<ItemRequest> captor = ArgumentCaptor.forClass(ItemRequest.class);
@@ -54,17 +54,17 @@ class ItemRequestServiceImplUnitTest {
     }
 
     @Test
-    void getAllRequestsByUser_emptyList() {
+    void getAllRequestsByUserEmptyList() {
         when(userService.findEntityById(1L)).thenReturn(user);
         when(requestRepo.findAllByRequestorIdOrderByCreatedDesc(1L))
                 .thenReturn(List.of());
 
         assertThat(service.getAllRequestsByUser(1L)).isEmpty();
-        verify(itemRepo, never()).findByRequestIdIn(any());
+        verify(itemRepo).findByRequestIdIn(eq(Collections.emptyList()));
     }
 
     @Test
-    void getAllRequestsByUser_withItems() {
+    void getAllRequestsByUserWithItems() {
         ItemRequest req = makeReq(10L);
         Item item = Item.builder().id(99L).name("Дрель").description("d")
                 .available(true).owner(user).request(req).build();
@@ -83,7 +83,7 @@ class ItemRequestServiceImplUnitTest {
     }
 
     @Test
-    void getAllUserRequests_paginationAndFilter() {
+    void getAllUserRequestsPaginationAndFilter() {
         ItemRequest other = makeReq(20L);
         Page<ItemRequest> page = new PageImpl<>(List.of(other));
 
@@ -100,7 +100,7 @@ class ItemRequestServiceImplUnitTest {
     }
 
     @Test
-    void getById_notFound_throws404() {
+    void getByIdNotFoundThrows404() {
         when(userService.findEntityById(1L)).thenReturn(user);
         when(requestRepo.findById(5L)).thenReturn(Optional.empty());
 
@@ -109,7 +109,7 @@ class ItemRequestServiceImplUnitTest {
     }
 
     @Test
-    void getById_success_withItems() {
+    void getByIdSuccessWithItems() {
         ItemRequest req = makeReq(30L);
         when(userService.findEntityById(1L)).thenReturn(user);
         when(requestRepo.findById(30L)).thenReturn(Optional.of(req));

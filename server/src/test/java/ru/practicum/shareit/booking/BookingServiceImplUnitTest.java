@@ -46,7 +46,7 @@ class BookingServiceImplUnitTest {
 
     @Test
     @DisplayName("create(): владелец бронирует свою вещь → 404")
-    void create_ownerBooksOwnItem() {
+    void createOwnerBooksOwnItem() {
         when(itemService.findEntityById(5L)).thenReturn(item);
         BookingRequestDto dto = makeReq();
 
@@ -57,7 +57,7 @@ class BookingServiceImplUnitTest {
 
     @Test
     @DisplayName("create(): предмет недоступен → 400")
-    void create_unavailableItem() {
+    void createUnavailableItem() {
         Item unavailable = Item.builder().id(6L).available(false).owner(owner).build();
         BookingRequestDto dto = makeReq(); dto.setItemId(6L);
 
@@ -101,7 +101,7 @@ class BookingServiceImplUnitTest {
 
     @Test
     @DisplayName("getById(): чужой пользователь → SecurityException")
-    void getById_foreignUser() {
+    void getByIdForeignUser() {
         Booking stored = Booking.builder().id(9L).booker(booker).item(item)
                 .status(Status.WAITING).build();
         when(repo.findById(9L)).thenReturn(Optional.of(stored));
@@ -111,12 +111,17 @@ class BookingServiceImplUnitTest {
     }
 
     Booking waiting(Long id) {
-        return Booking.builder().id(id).status(Status.WAITING).item(item).build();
+        return Booking.builder()
+                .id(id)
+                .status(Status.WAITING)
+                .item(item)
+                .booker(booker)
+                .build();
     }
 
     @Test
     @DisplayName("approve(): не владелец → 403")
-    void approve_notOwner() {
+    void approveNotOwner() {
         when(repo.findById(3L)).thenReturn(Optional.of(waiting(3L)));
 
         assertThatThrownBy(() -> service.approveBooking(3L, 999L, true))
@@ -126,7 +131,7 @@ class BookingServiceImplUnitTest {
 
     @Test
     @DisplayName("approve(): уже обработано → 400")
-    void approve_alreadyProcessed() {
+    void approveAlreadyProcessed() {
         Booking ready = waiting(4L);
         ready.setStatus(Status.APPROVED);
 
@@ -139,7 +144,7 @@ class BookingServiceImplUnitTest {
 
     @Test
     @DisplayName("approve(): happy path — отклонение")
-    void approve_successReject() {
+    void approveSuccessReject() {
         when(repo.findById(7L)).thenReturn(Optional.of(waiting(7L)));
         when(repo.save(any())).thenAnswer(i -> i.getArgument(0, Booking.class));
 
@@ -150,7 +155,7 @@ class BookingServiceImplUnitTest {
 
     @Test
     @DisplayName("getAllByOwner(): UNKNOWN state → 400")
-    void getAll_badState() {
+    void getAllBadState() {
         when(itemService.findEntitiesByOwner(1L)).thenReturn(List.of(item));
 
         assertThatThrownBy(() -> service.getAllByOwner(1L, "SOME"))
@@ -160,7 +165,7 @@ class BookingServiceImplUnitTest {
 
     @Test
     @DisplayName("getAllByOwner(): ALL — возвращает бронирования")
-    void getAll_ok() {
+    void getAll() {
         when(itemService.findEntitiesByOwner(1L)).thenReturn(List.of(item));
         when(repo.findByItemIdInOrderByStartDesc(List.of(5L)))
                 .thenReturn(List.of(waiting(11L)));

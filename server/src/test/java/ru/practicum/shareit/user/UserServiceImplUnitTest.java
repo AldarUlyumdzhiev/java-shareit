@@ -32,7 +32,7 @@ class UserServiceImplUnitTest {
 
     @Test
     @DisplayName("create(): happy-path сохраняет пользователя")
-    void create_ok() {
+    void create() {
         UserDto dto = new UserDto();
         dto.setName("Vasya");
         dto.setEmail("v@mail.ru");
@@ -52,7 +52,7 @@ class UserServiceImplUnitTest {
 
     @Test
     @DisplayName("create(): дублирующая почта ⇒ IllegalStateException")
-    void create_duplicateEmail() {
+    void createDuplicateEmail() {
         when(repo.existsByEmail("dup@mail.ru")).thenReturn(true);
 
         UserDto dto = new UserDto();
@@ -70,7 +70,7 @@ class UserServiceImplUnitTest {
 
     @Test
     @DisplayName("update(): меняем name и email")
-    void update_changeNameAndEmail() {
+    void updateChangeNameAndEmail() {
         when(repo.findById(5L)).thenReturn(Optional.of(persisted()));
         when(repo.existsByEmail("new@mail.ru")).thenReturn(false);
         when(repo.save(any())).thenAnswer(inv -> inv.getArgument(0));
@@ -87,7 +87,7 @@ class UserServiceImplUnitTest {
 
     @Test
     @DisplayName("update(): новый email уже занят ⇒ IllegalStateException")
-    void update_emailBusy() {
+    void updateEmailBusy() {
         when(repo.findById(5L)).thenReturn(Optional.of(persisted()));
         when(repo.existsByEmail("busy@mail.ru")).thenReturn(true);
 
@@ -100,7 +100,7 @@ class UserServiceImplUnitTest {
 
     @Test
     @DisplayName("update(): пользователь не найден ⇒ NoSuchElementException")
-    void update_userNotFound() {
+    void updateUserNotFound() {
         when(repo.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.update(99L, new UserDto()))
@@ -108,7 +108,7 @@ class UserServiceImplUnitTest {
     }
 
     @Test
-    void findById_returnsDto() {
+    void findByIdReturnsDto() {
         when(repo.findById(5L)).thenReturn(Optional.of(persisted()));
 
         UserDto dto = service.findById(5L);
@@ -117,7 +117,7 @@ class UserServiceImplUnitTest {
     }
 
     @Test
-    void findEntityById_notFound() {
+    void findEntityByIdNotFound() {
         when(repo.findById(7L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> service.findEntityById(7L))
@@ -125,7 +125,7 @@ class UserServiceImplUnitTest {
     }
 
     @Test
-    void findAll_mapsEntities() {
+    void findAllMapsEntities() {
         when(repo.findAll()).thenReturn(List.of(
                 new User(1L, "A", "a@x"),
                 new User(2L, "B", "b@x")
@@ -139,7 +139,7 @@ class UserServiceImplUnitTest {
     }
 
     @Test
-    void delete_invokesRepository() {
+    void deleteInvokesRepository() {
         service.delete(3L);
         verify(repo).deleteById(3L);
     }
