@@ -27,7 +27,7 @@ class BookingControllerTest {
     private static final String HDR = "X-Sharer-User-Id";
     private static final LocalDateTime NOW = LocalDateTime.now();
 
-    @Autowired private MockMvc      mvc;
+    @Autowired private MockMvc mvc;
     @Autowired private ObjectMapper mapper;
 
     @MockBean private BookingClient bookingClient;
@@ -58,7 +58,7 @@ class BookingControllerTest {
     }
 
 
-    // POST /bookings — start in past ⇒ 400
+    // POST /bookings
     @Test
     void postPastStart() throws Exception {
         BookItemRequestDto bad = new BookItemRequestDto(
@@ -141,7 +141,9 @@ class BookingControllerTest {
         mvc.perform(get("/bookings")
                         .header(HDR, 5)
                         .param("state", "SOME"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Unknown state: SOME"));
+
         verify(bookingClient, never()).getBookings(anyLong());
     }
 }

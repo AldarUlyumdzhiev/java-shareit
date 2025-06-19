@@ -58,7 +58,7 @@ class ItemControllerTest {
     }
 
 
-    // POST /items — validation 400 (blank name)
+    // POST /items
     @Test
     void postBlankName() throws Exception {
         ItemDto in = new ItemDto();
@@ -99,7 +99,7 @@ class ItemControllerTest {
     }
 
 
-    // PATCH /items/{id} — no fields changed ⇒ 400
+    // PATCH /items/{id}
     @Test
     void patchNoFields() throws Exception {
         ItemUpdateDto empty = new ItemUpdateDto();
@@ -186,7 +186,7 @@ class ItemControllerTest {
     }
 
 
-    // POST /items/{id}/comment — blank text ⇒ 400
+    // POST /items/{id}/comment
     @Test
     void postCommentBlank() throws Exception {
         CommentRequestDto req = new CommentRequestDto(); // text null

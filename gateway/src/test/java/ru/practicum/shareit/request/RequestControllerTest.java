@@ -25,7 +25,7 @@ class RequestControllerTest {
 
     private static final String HDR = "X-Sharer-User-Id";
 
-    @Autowired private MockMvc      mvc;
+    @Autowired private MockMvc mvc;
     @Autowired private ObjectMapper mapper;
 
     @MockBean private RequestClient requestClient;
@@ -55,7 +55,7 @@ class RequestControllerTest {
     }
 
 
-    // post /requests — blank description ⇒ 400
+    // post /requests
     @Test
     void postBlankDescription() throws Exception {
         CreateItemRequestDto in = new CreateItemRequestDto(); // description null

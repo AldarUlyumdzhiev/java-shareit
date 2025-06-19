@@ -49,7 +49,7 @@ class UserControllerTest {
     }
 
 
-    // post /users — wrong email format -> 400
+    // post /users
     @Test
     void postBadEmail() throws Exception {
         UserDto in = new UserDto();
