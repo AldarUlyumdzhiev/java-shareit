@@ -33,11 +33,10 @@ class BookingServiceImplIT {
     @Autowired private ItemRepository itemRepository;
     @Autowired private UserRepository userRepository;
 
-
     // create
     @Test
     @DisplayName("create(): booker может создать 'WAITING' бронь на чужой item")
-    void create_booking_success() {
+    void createBookingSuccess() {
         User owner  = userRepository.save(User.builder().name("Owner").email("o@mail.ru").build());
         User booker = userRepository.save(User.builder().name("Booker").email("b@mail.ru").build());
 
@@ -55,11 +54,10 @@ class BookingServiceImplIT {
         assertThat(bookingRepository.count()).isEqualTo(1);
     }
 
-
     // approveBooking
     @Test
     @DisplayName("approveBooking(): владелец переводит WAITING в APPROVED")
-    void approve_booking() {
+    void approveBooking() {
         User owner  = userRepository.save(User.builder().name("O").email("o2@mail.ru").build());
         User booker = userRepository.save(User.builder().name("B").email("b2@mail.ru").build());
 
@@ -80,7 +78,7 @@ class BookingServiceImplIT {
 
     @Test
     @DisplayName("approveBooking(): не-владелец → FORBIDDEN")
-    void approve_booking_notOwner() {
+    void approveBookingNotOwner() {
         User owner  = userRepository.save(User.builder().name("O3").email("o3@mail.ru").build());
         User booker = userRepository.save(User.builder().name("B3").email("b3@mail.ru").build());
         User stranger = userRepository.save(User.builder().name("X").email("x@mail.ru").build());
@@ -100,11 +98,10 @@ class BookingServiceImplIT {
                 .hasMessageContaining("403");
     }
 
-
     // getById
     @Test
     @DisplayName("getById(): доступен владельцу и бронирующему")
-    void getById_ownerAndBooker() {
+    void getByIdOwnerAndBooker() {
         User owner  = userRepository.save(User.builder().name("O4").email("o4@mail.ru").build());
         User booker = userRepository.save(User.builder().name("B4").email("b4@mail.ru").build());
 
@@ -127,10 +124,9 @@ class BookingServiceImplIT {
         assertThat(byOwner.getId()).isEqualTo(booking.getId());
     }
 
-
     // getAllByUser
     @Test
-    void getAllByUser_returnsList() {
+    void getAllByUserReturnsList() {
         User owner  = userRepository.save(User.builder().name("O5").email("o5@mail.ru").build());
         User booker = userRepository.save(User.builder().name("B5").email("b5@mail.ru").build());
 
@@ -151,10 +147,9 @@ class BookingServiceImplIT {
                 .containsExactly(Status.APPROVED);
     }
 
-
     // getAllByOwner
     @Test
-    void getAllByOwner_allState() {
+    void getAllByOwnerAllState() {
         User owner  = userRepository.save(User.builder().name("O6").email("o6@mail.ru").build());
         User booker = userRepository.save(User.builder().name("B6").email("b6@mail.ru").build());
 

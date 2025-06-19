@@ -21,7 +21,6 @@ class UserDtoJsonTest {
     private final Validator validator =
             Validation.buildDefaultValidatorFactory().getValidator();
 
-
     // serialize
     @Test
     void toJson_containsAllFields() throws Exception {
@@ -37,7 +36,6 @@ class UserDtoJsonTest {
         assertThat(json).contains("\"email\":\"bob@mail.ru\"");
     }
 
-
     // deserialize
     @Test
     void fromJson_readsAllFields() throws Exception {
@@ -49,7 +47,6 @@ class UserDtoJsonTest {
         assertThat(dto.getName()).isEqualTo("Bob");
         assertThat(dto.getEmail()).isEqualTo("bob@mail.ru");
     }
-
 
     // validation: invalid email
     @Test
@@ -66,7 +63,6 @@ class UserDtoJsonTest {
                 .asString()
                 .contains("valid");
     }
-
 
     // validation: blank name
     @Test

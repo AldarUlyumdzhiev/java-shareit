@@ -28,7 +28,6 @@ class ItemControllerTest {
 
     @MockBean  private ItemService itemService;
 
-
     // POST /items
     @Test
     void createItem() throws Exception {
@@ -54,7 +53,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.name").value("Дрель"));
     }
 
-
     // PATCH /items/{id}
     @Test
     void updateItem() throws Exception {
@@ -75,7 +73,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.name").value("Перфоратор"));
     }
 
-
     // GET /items/{id}
     @Test
     void getItemById() throws Exception {
@@ -90,7 +87,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.id").value(4))
                 .andExpect(jsonPath("$.name").value("Лобзик"));
     }
-
 
     // POST /items/{id}/comment
     @Test
@@ -113,7 +109,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.text").value("Отличная вещь"));
     }
 
-
     // GET /items
     @Test
     void getItemsByOwner() throws Exception {
@@ -124,7 +119,6 @@ class ItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
-
 
     // GET /items/search
     @Test

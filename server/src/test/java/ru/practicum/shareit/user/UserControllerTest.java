@@ -26,7 +26,6 @@ class UserControllerTest {
 
     @MockBean  private UserService userService;
 
-
     // POST /users
     @Test
     void createUser() throws Exception {
@@ -49,7 +48,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email").value("bob@mail.ru"));
     }
 
-
     // PATCH /users/{id}
     @Test
     void updateUser() throws Exception {
@@ -69,7 +67,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.name").value("Bob"));
     }
 
-
     // GET /users
     @Test
     void getAllUsers() throws Exception {
@@ -79,7 +76,6 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3));
     }
-
 
     // GET /users/{id}
     @Test
@@ -95,7 +91,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id").value(5))
                 .andExpect(jsonPath("$.email").value("user@mail.ru"));
     }
-
 
     // DELETE /users/{id}
     @Test

@@ -17,7 +17,7 @@ class BookingDtoJsonTest {
     @Autowired private ObjectMapper mapper;
 
     @Test
-    void BookingResponseToDtoAndBack() throws Exception {
+    void entityToDtoAndBack() throws Exception {
         LocalDateTime start = LocalDateTime.of(2030,1,1,12,0);
         LocalDateTime end   = start.plusDays(1);
 

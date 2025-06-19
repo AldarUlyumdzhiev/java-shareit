@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 class ItemMapperTest {
 
     @Test
-    void toItemDto_and_back_and_withBookings() {
+    void toItemDtoWithBookings() {
         User owner = User.builder().id(7L).name("Owner").build();
         ItemRequest request = ItemRequest.builder().id(55L).description("Нужен дрель").requestor(owner).build();
 

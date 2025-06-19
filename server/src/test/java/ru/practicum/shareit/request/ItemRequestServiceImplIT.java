@@ -49,10 +49,9 @@ class ItemRequestServiceImplIT {
         assertThat(saved.getItems()).isEmpty();
     }
 
-
     // getAllRequestsByUser
     @Test
-    void getAllRequestsByUser_returnsOwnRequests() {
+    void getAllRequestsByUserReturnsOwnRequests() {
         User user = userRepository.save(
                 User.builder().name("Bob").email("bob@mail.ru").build());
 
@@ -71,10 +70,9 @@ class ItemRequestServiceImplIT {
         assertThat(list.get(1).getDescription()).isEqualTo("Старый запрос");
     }
 
-
     // getAllUserRequests
     @Test
-    void getAllUserRequests_pagination() {
+    void getAllUserRequestsPagination() {
         User user1 = userRepository.save(
                 User.builder().name("TestUser1").email("user1@test.com").build());
         User user2 = userRepository.save(
@@ -94,11 +92,10 @@ class ItemRequestServiceImplIT {
         assertThat(page.get(0).getDescription()).isEqualTo("req2");
     }
 
-
     // getById
     @Test
     @DisplayName("getById(): возвращает запрос вместе с ответными вещами")
-    void getById_withItems() {
+    void getByIdWithItems() {
         User requester = userRepository.save(
                 User.builder().name("TestRequester").email("requester@test.com").build());
         User owner = userRepository.save(

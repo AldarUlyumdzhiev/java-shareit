@@ -30,7 +30,6 @@ class ItemRequestControllerTest {
 
     @MockBean  private ItemRequestService requestService;
 
-
     // POST /requests
     @Test
     void createRequest() throws Exception {
@@ -55,7 +54,6 @@ class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.description").value("Нужна дрель"));
     }
 
-
     // GET /requests
     @Test
     void getOwnRequests() throws Exception {
@@ -67,7 +65,6 @@ class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-
     // GET /requests/all
     @Test
     void getAllUserRequests() throws Exception {
@@ -78,7 +75,6 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1));
     }
-
 
     // GET /requests/{id}
     @Test

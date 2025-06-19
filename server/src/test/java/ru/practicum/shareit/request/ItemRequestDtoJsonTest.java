@@ -13,15 +13,12 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
-
-
 @JsonTest
 class ItemRequestDtoJsonTest {
 
     @Autowired private ObjectMapper mapper;
     private final Validator validator =
             Validation.buildDefaultValidatorFactory().getValidator();
-
 
     // serialize
     @Test
@@ -34,7 +31,6 @@ class ItemRequestDtoJsonTest {
         assertThat(json).contains("\"description\":\"Нужно ведро\"");
     }
 
-
     // deserialize
     @Test
     void readsDescFromJson() throws Exception {
@@ -44,7 +40,6 @@ class ItemRequestDtoJsonTest {
 
         assertThat(dto.getDescription()).isEqualTo("Отбойный молоток");
     }
-
 
     // validation
     @Test
@@ -60,8 +55,6 @@ class ItemRequestDtoJsonTest {
                 .contains("required");
     }
 
-
-    // validation
     @Test
     void validationValidDescription() {
         CreateItemRequestDto dto = new CreateItemRequestDto();

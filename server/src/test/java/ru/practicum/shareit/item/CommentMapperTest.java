@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.*;
 class CommentMapperTest {
 
     @Test
-    void toComment_and_toCommentResponseDto() {
+    void toCommentAndResponseDto() {
         // вход
         User author = User.builder().id(9L).name("Alice").build();
         Item item = Item.builder().id(3L).name("Отвертка").build();

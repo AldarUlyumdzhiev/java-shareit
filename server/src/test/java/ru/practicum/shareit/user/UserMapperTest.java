@@ -18,7 +18,7 @@ class UserMapperTest {
             Validation.buildDefaultValidatorFactory().getValidator();
 
     @Test
-    void toUserDto_and_back() {
+    void toUserDtoAndBack() {
         // entity to dto
         User user = User.builder()
                 .id(10L)
@@ -41,7 +41,7 @@ class UserMapperTest {
     }
 
     @Test
-    void validation_blankAndInvalidEmail() {
+    void validationBlankInvalidEmail() {
         UserDto dto = new UserDto();
         dto.setName("");           // blank
         dto.setEmail("wrongMail"); // invalid

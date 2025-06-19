@@ -39,7 +39,7 @@ class ItemServiceImplIT {
     // create
     @Test
     @DisplayName("create(): сохраняет ItemDto и проставляет owner")
-    void create_item() {
+    void createItem() {
         User owner = userRepository.save(new User(null, "Owner", "own@mail.ru"));
 
         ItemDto dto = new ItemDto();
@@ -60,7 +60,7 @@ class ItemServiceImplIT {
     // update
     @Test
     @DisplayName("update(): владелец может изменить поля через ItemUpdateDto")
-    void update_item() {
+    void updateItem() {
         User owner = userRepository.save(new User(null, "Owner", "upd@mail.ru"));
         Item item = itemRepository.save(Item.builder()
                 .name("Старая").description("desc").available(true).owner(owner).build());
@@ -79,7 +79,7 @@ class ItemServiceImplIT {
     // findById
     @Test
     @DisplayName("findById(): владельцу возвращает last/next booking")
-    void findById_ownerSeeBookings() {
+    void findByIdOwnerSeeBookings() {
         User owner  = userRepository.save(new User(null, "Owner", "own2@mail.ru"));
         User booker = userRepository.save(new User(null, "Booker", "b@mail.ru"));
 
@@ -105,7 +105,7 @@ class ItemServiceImplIT {
 
     // findAllByOwner
     @Test
-    void findAllByOwner_returnsAll() {
+    void findAllByOwnerReturnsAll() {
         User owner = userRepository.save(new User(null, "O", "o@mail.ru"));
         itemRepository.save(Item.builder().name("A").description("d").available(true).owner(owner).build());
         itemRepository.save(Item.builder().name("B").description("d").available(false).owner(owner).build());
@@ -117,7 +117,7 @@ class ItemServiceImplIT {
 
     // search
     @Test
-    void search_returnsOnlyAvailable() {
+    void searchReturnsAvailable() {
         User owner = userRepository.save(new User(null, "O2", "o2@mail.ru"));
         itemRepository.save(Item.builder().name("Ключ").description("набор").available(true).owner(owner).build());
         itemRepository.save(
@@ -137,7 +137,7 @@ class ItemServiceImplIT {
 
     // createComment
     @Test
-    void createComment_afterApprovedBooking() {
+    void createCommentAfterApproved() {
         User owner  = userRepository.save(new User(null, "O3", "o3@mail.ru"));
         User booker = userRepository.save(new User(null, "B3", "b3@mail.ru"));
         Item item   = itemRepository.save(

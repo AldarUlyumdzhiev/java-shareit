@@ -23,11 +23,10 @@ class UserServiceImplIT {
     @Autowired private UserService userService;
     @Autowired private UserRepository userRepository;
 
-
     // create
     @Test
     @DisplayName("create(): сохраняет юзера и проставляет id")
-    void create_user() {
+    void createUser() {
         UserDto dto = new UserDto();
         dto.setName("Bob");
         dto.setEmail("bob@mail.ru");
@@ -43,7 +42,7 @@ class UserServiceImplIT {
 
     @Test
     @DisplayName("create(): повторный email -> IllegalStateException")
-    void create_duplicateEmail() {
+    void createDuplicateEmail() {
         userRepository.save(User.builder().name("Bob").email("dup@mail.ru").build());
 
         UserDto dup = new UserDto();
@@ -54,11 +53,10 @@ class UserServiceImplIT {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-
     // update
     @Test
     @DisplayName("update(): можно изменить имя и email")
-    void update_user() {
+    void updateUser() {
         User origin = userRepository.save(
                 User.builder().name("Old").email("old@mail.ru").build());
 
@@ -74,7 +72,7 @@ class UserServiceImplIT {
 
     @Test
     @DisplayName("update(): email занят -> IllegalStateException")
-    void update_duplicateEmail() {
+    void updateDuplicateEmail() {
         userRepository.save(User.builder().name("One").email("one@mail.ru").build());
         User u2 = userRepository.save(
                 User.builder().name("Two").email("two@mail.ru").build());
@@ -86,10 +84,9 @@ class UserServiceImplIT {
                 .isInstanceOf(IllegalStateException.class);
     }
 
-
     // findById
     @Test
-    void findById_returnsDto() {
+    void findByIdReturnsDto() {
         User saved = userRepository.save(
                 User.builder().name("FindMe").email("find@mail.ru").build());
 
@@ -98,10 +95,9 @@ class UserServiceImplIT {
         assertThat(dto.getName()).isEqualTo("FindMe");
     }
 
-
     // findAll
     @Test
-    void findAll_returnsAll() {
+    void findAllReturnsAll() {
         userRepository.save(User.builder().name("U1").email("u1@mail.ru").build());
         userRepository.save(User.builder().name("U2").email("u2@mail.ru").build());
 
