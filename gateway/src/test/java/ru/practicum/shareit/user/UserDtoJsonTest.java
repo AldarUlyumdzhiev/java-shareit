@@ -57,9 +57,9 @@ class UserDtoJsonTest {
         dto.setName("Ald");
         dto.setEmail("wrong");
 
-        Set<ConstraintViolation<UserDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(dto);
 
-        assertThat(v).hasSize(1)
+        assertThat(violations).hasSize(1)
                 .first()
                 .extracting(ConstraintViolation::getPropertyPath)
                 .asString()
@@ -74,9 +74,9 @@ class UserDtoJsonTest {
         dto.setName("");
         dto.setEmail("ok@mail.ru");
 
-        Set<ConstraintViolation<UserDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<UserDto>> violations = validator.validate(dto);
 
-        assertThat(v).hasSize(1)
+        assertThat(violations).hasSize(1)
                 .first()
                 .extracting(ConstraintViolation::getPropertyPath)
                 .asString()

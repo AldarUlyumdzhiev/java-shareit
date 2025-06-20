@@ -47,26 +47,24 @@ class ItemDtoJsonTest {
     void blankFields() {
         ItemDto dto = new ItemDto(); // все обязательные поля пусты
 
-        Set<ConstraintViolation<ItemDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<ItemDto>> violations = validator.validate(dto);
 
-        assertThat(v).hasSize(3); // name, description, available
+        assertThat(violations).hasSize(3); // name, description, available
     }
-
 
     // commBlank
     @Test
     void commBlank() {
         CommentRequestDto dto = new CommentRequestDto(); // text null
 
-        Set<ConstraintViolation<CommentRequestDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(dto);
 
-        assertThat(v).hasSize(1)
+        assertThat(violations).hasSize(1)
                 .first()
                 .extracting(ConstraintViolation::getPropertyPath)
                 .asString()
                 .isEqualTo("text");
     }
-
 
     // commOk
     @Test
@@ -74,8 +72,8 @@ class ItemDtoJsonTest {
         CommentRequestDto dto = new CommentRequestDto();
         dto.setText("Отлично!");
 
-        Set<ConstraintViolation<CommentRequestDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<CommentRequestDto>> violations = validator.validate(dto);
 
-        assertThat(v).isEmpty();
+        assertThat(violations).isEmpty();
     }
 }

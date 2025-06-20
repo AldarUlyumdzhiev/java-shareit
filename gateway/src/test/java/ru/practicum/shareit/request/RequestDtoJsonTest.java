@@ -39,9 +39,9 @@ class RequestDtoJsonTest {
     void blank() {
         CreateItemRequestDto dto = new CreateItemRequestDto();
 
-        Set<ConstraintViolation<CreateItemRequestDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<CreateItemRequestDto>> violations = validator.validate(dto);
 
-        assertThat(v).hasSize(1)
+        assertThat(violations).hasSize(1)
                 .first()
                 .extracting(ConstraintViolation::getPropertyPath)
                 .asString()
@@ -55,8 +55,8 @@ class RequestDtoJsonTest {
         CreateItemRequestDto dto = new CreateItemRequestDto();
         dto.setDescription("Газонокосилка");
 
-        Set<ConstraintViolation<CreateItemRequestDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<CreateItemRequestDto>> violations = validator.validate(dto);
 
-        assertThat(v).isEmpty();
+        assertThat(violations).isEmpty();
     }
 }

@@ -30,18 +30,18 @@ public class BookingController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> get(@PathVariable long id,
-									  @RequestHeader(SHARER_ID_HEADER) @Positive long userId) {
+									  @RequestHeader(SHARER_ID_HEADER) long userId) {
 		return bookingClient.get(id, userId);
 	}
 
 	@GetMapping
 	public ResponseEntity<Object> getAllByUser(
 			@RequestHeader(SHARER_ID_HEADER) Long userId,
-			@RequestParam(name = "state", defaultValue = "ALL") String stateParam
+			@RequestParam(defaultValue = "ALL") String state
 	) {
-		BookingState state = BookingState.from(stateParam)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
-		log.info("Getting bookings for user={}, state={}", userId, state);
+		BookingState bookingState = BookingState.from(state)
+				.orElseThrow(() -> new IllegalArgumentException(String.format("Unknown state: %s", state)));
+		log.info("Getting bookings for user={}, state={}", userId, bookingState);
 
 		return bookingClient.getBookings(userId);
 	}
@@ -49,7 +49,7 @@ public class BookingController {
 	@PatchMapping("/{id}")
 	public ResponseEntity<Object> approve(@PathVariable long id,
 										  @RequestParam boolean approved,
-										  @RequestHeader(SHARER_ID_HEADER) @Positive long ownerId) {
+										  @RequestHeader(SHARER_ID_HEADER) long ownerId) {
 		return bookingClient.approve(id, ownerId, approved);
 	}
 
@@ -57,7 +57,7 @@ public class BookingController {
 	public ResponseEntity<Object> getAllByOwner(@RequestHeader(SHARER_ID_HEADER) long ownerId,
 												@RequestParam(defaultValue = "ALL") String state) {
 		BookingState bookingState = BookingState.from(state)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + state));
+				.orElseThrow(() -> new IllegalArgumentException(String.format("Unknown state: %s", state)));
 		return bookingClient.getAllByOwner(ownerId, bookingState);
 	}
 }

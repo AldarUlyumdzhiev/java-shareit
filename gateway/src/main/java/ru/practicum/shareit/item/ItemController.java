@@ -47,11 +47,6 @@ public class ItemController {
         return itemClient.getItem(userId, itemId);
     }
 
-
-
-
-
-
     @PostMapping(ITEM_ID_PATH + "/comment")
     public ResponseEntity<Object> createComment(@RequestHeader(SHARER_ID_HEADER) long authorId,
                                                 @PathVariable Long itemId,
@@ -59,13 +54,6 @@ public class ItemController {
         log.info("Creating comment for itemId={}, authorId={}, comment={}", itemId, authorId, commentRequestDto);
         return itemClient.createComment(authorId, itemId, commentRequestDto);
     }
-
-
-
-
-
-
-
 
     @GetMapping
     public ResponseEntity<Object> getItems(@RequestHeader(SHARER_ID_HEADER) long userId) {

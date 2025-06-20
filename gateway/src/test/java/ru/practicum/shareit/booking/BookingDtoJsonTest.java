@@ -63,15 +63,14 @@ class BookingDtoJsonTest {
                 NOW.minusDays(1),
                 NOW.plusDays(1));
 
-        Set<ConstraintViolation<BookItemRequestDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<BookItemRequestDto>> violations = validator.validate(dto);
 
-        assertThat(v).hasSize(1)
+        assertThat(violations).hasSize(1)
                 .first()
                 .extracting(ConstraintViolation::getPropertyPath)
                 .asString()
                 .isEqualTo("start");
     }
-
 
     // pastEnd
     @Test
@@ -81,15 +80,14 @@ class BookingDtoJsonTest {
                 NOW.plusHours(2),
                 NOW.minusHours(2));
 
-        Set<ConstraintViolation<BookItemRequestDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<BookItemRequestDto>> violations = validator.validate(dto);
 
-        assertThat(v).hasSize(1)
+        assertThat(violations).hasSize(1)
                 .first()
                 .extracting(ConstraintViolation::getPropertyPath)
                 .asString()
                 .isEqualTo("end");
     }
-
 
     // validDates
     @Test
@@ -99,8 +97,8 @@ class BookingDtoJsonTest {
                 NOW.plusHours(1),
                 NOW.plusHours(5));
 
-        Set<ConstraintViolation<BookItemRequestDto>> v = validator.validate(dto);
+        Set<ConstraintViolation<BookItemRequestDto>> violations = validator.validate(dto);
 
-        assertThat(v).isEmpty();
+        assertThat(violations).isEmpty();
     }
 }
